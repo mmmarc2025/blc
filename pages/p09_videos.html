@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+	
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- 若真的需要自動跳轉，請用正確寫法 -->
+<!-- <meta http-equiv="refresh" content="6000000; url=http://www.2025msfin.url.tw/index.html"> -->
+<meta http-equiv="refresh" content="2700; url=http://www.2025msfin.url.tw/index.html">
+	<link rel="preconnect" href="https://www.youtube-nocookie.com">
+<link rel="preconnect" href="https://i.ytimg.com">
+<link rel="preconnect" href="https://www.google.com">
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+
+<title>北靈宮｜相關影片介紹</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+<style>
+:root{
+  --max:1280px;
+  --safeX:24px;
+
+  --topbarY:10px;
+
+  --contentTop:110px;
+  --contentShiftY:3vh;
+
+  --panelBaseH:60vh;
+  --panelExtraH:5vh;
+
+  --panelMinRatio:0.40;
+  --panelMaxRatio:0.75;
+
+  --inkBottomOverlap:92px;
+  --navOffsetY:1.1;
+  --navPageShift:8vh;
+
+  --btnW:210px;
+  --btnH:64px;
+  --btnGap:18px;
+
+  /* 功能列比例 */
+  --titleW:60vw;
+  --titleH:18vh;
+  --actionW:8vw;
+
+  /* ✅ 下一頁左移比例 */
+  --nextShiftX:4vw;
+
+  --gold:#f5d36a;
+  --dark:#2b1c0f;
+}
+
+/* Reset */
+*{box-sizing:border-box;}
+html,body{margin:0;height:100%;}
+body{
+  font-family:"Noto Sans TC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  background:#000;
+  overflow:hidden;
+}
+
+.stage{
+  position:relative;
+  width:100%;
+  height:100vh;
+}
+
+/* ===== 背景 ===== */
+.bg-layer{
+  position:absolute;
+  inset:0;
+  z-index:1;
+}
+.bg-layer .bg{
+  position:absolute;
+  inset:0;
+  background:url("./images/page_bg01_02.jpg") top center / cover no-repeat;
+}
+
+/* ===== 白色內容區 ===== */
+.content-layer{
+  position:absolute;
+  top:calc(var(--contentTop) + var(--contentShiftY));
+  left:50%;
+  transform:translateX(-50%) scaleX(1.1);
+  width:min(var(--max), calc(100% - var(--safeX)*2));
+  z-index:2;
+}
+
+.content-panel{
+  position:relative;
+  height:calc(var(--panelBaseH) + var(--panelExtraH));
+  background-color:transparent;
+  border-radius:16px;
+  box-shadow:0 18px 38px rgba(0,0,0,.25);
+  overflow:hidden;
+}
+
+.content-scroll{
+  height:100%;
+  overflow:auto;
+  padding:30px 34px 40px;
+  color:var(--dark);
+  line-height:1.8;
+  text-align: center; 
+}
+
+/* ===== UI 層 ===== */
+.ui-layer{
+  position:absolute;
+  inset:0;
+  z-index:3;
+  pointer-events:none;
+}
+
+/* ===== 上方功能列 ===== */
+.topbar{
+  position:absolute;
+  top:var(--topbarY);
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:auto;
+}
+
+/* Logo */
+.logo{
+  position:absolute;
+  left:var(--safeX);
+  width:10px;
+  height:56px;
+}
+
+/* Title */
+.title-wrap{
+  width:var(--titleW);
+  height:var(--titleH);
+  background:url("./images/page_uptitlebg2-20.png") center/contain no-repeat;
+  position:relative;
+}
+.title-text{
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;      /* 垂直置中 */
+  justify-content: center; /* 水平靠左 */
+  font-size: clamp(18px, 2.4vw, 32px);
+  letter-spacing: .08em;
+  color: #fff;
+}
+
+/* ===== 右側功能按鈕（分開底圖，皆往左內縮 10%） ===== */
+.actions{
+  position:absolute;
+  right:5%;
+  display:flex;
+  gap:1vw;
+}
+
+.action-btn{
+  width:var(--actionW);
+  height:var(--titleH);
+  position:relative;
+  text-decoration:none;
+  pointer-events:auto;
+}
+
+.action-btn span{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:14px;
+  letter-spacing:.12em;
+}
+.actions2{
+  position:absolute;
+  left:15%;
+  display:flex;
+  gap:1vw;
+}
+
+.action2-btn{
+  width:var(--actionW);
+  height:var(--titleH);
+  position:relative;
+  text-decoration:none;
+  pointer-events:auto;
+}
+
+.action-btn2 span{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:14px;
+  letter-spacing:.12em;
+} 
+	
+/* 回首頁（往左 10%） */
+.action2-btn.home{
+  background:url("./images/page_upbtn_01.png") center/contain no-repeat;
+  transform: translateX(calc(-1 * var(--nextShiftX)));
+}
+
+/* 下一頁（往左 10%） */
+.action-btn.next{
+  background:url("./images/page_upbtn_02.png") center/contain no-repeat;
+  transform: translateX(calc(-1 * var(--nextShiftX)));
+}
+/* ===== 水墨 ===== */
+.ink{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:38vh;
+  background:url("./images/index_ink.png") center bottom / cover no-repeat;
+  pointer-events:none;
+  animation: inkBreath 6s ease-in-out infinite;
+}
+
+/* ===== 九按鈕 ===== */
+.nav-panel{
+  position:absolute;
+  left:50%;
+  bottom:calc(var(--inkBottomOverlap) * var(--navOffsetY) - var(--navPageShift));
+  transform:translateX(-50%);
+  width:min(var(--max), calc(100% - var(--safeX)*2));
+  pointer-events:auto;
+}
+
+.nav-grid{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:var(--btnGap);
+}
+
+    /* ===== 按鈕：使用 PNG 底圖（可反向色） ===== */
+    .nav-btn{
+      width: var(--btnW);
+      height: var(--btnH);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding: 0 16px;
+      border-radius: 10px;
+
+      /* 這裡改成 PNG 底圖 */
+      background: none;
+      background-image: url("./images/index_footer_bg1.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain; /* 文字顏色：亮底用深色字 */
+      color:#fff3da;
+      font-weight: 400;
+      letter-spacing: .08em;
+      text-decoration:none;
+      cursor:pointer;
+		text-decoration:none;     /* 明確移除底線 */
+		
+
+      position:relative;
+      transform: translateZ(0);
+      will-change: transform;
+      overflow:hidden;
+
+      /* 陰影（可視需要調強） */
+      filter: drop-shadow(0 12px 18px rgba(0,0,0,.24));
+      user-select:none;
+
+    }
+	.nav-btn:link,
+.nav-btn:visited,
+.nav-btn:hover,
+.nav-btn:active{
+  text-decoration:none;     /* 保險：所有狀態都沒底線 */
+}
+
+
+.nav-btn.is-invert{
+  /* 背景照用你指定的版本 */
+  background-image: url("./images/index_footer_bg2.png");
+
+  /* ❗只控制文字顏色 */
+  color: #ffffff; /* 或你要的反向文字色 */
+}
+	.nav-btn.is-invert:hover{
+  transform: translateY(-2px) scale(1.02);
+}
+
+    @keyframes rise{
+      from{ transform: translateY(18px); opacity:0; }
+      to{ transform: translateY(0); opacity:1; }
+    }
+    @keyframes float{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-6px); }
+    }
+
+    /* 光澤掃過（維持原本效果） */
+    .nav-btn::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: linear-gradient(120deg,
+        transparent 35%,
+        rgba(255,255,255,.55) 48%,
+        transparent 60%);
+      transform: translateX(-60%) rotate(12deg);
+      opacity:0;
+      transition: opacity .25s ease;
+      pointer-events:none;
+    }
+    .nav-btn:hover::after{
+      opacity:1;
+      animation: shine 1.1s ease;
+    }
+    @keyframes shine{
+      from{ transform: translateX(-70%) rotate(12deg); }
+      to{ transform: translateX(70%) rotate(12deg); }
+    }
+
+    .nav-btn:hover{
+      transform: translateY(-2px) scale(1.02);
+      /* hover 亮一點 */
+      filter: brightness(1.06) drop-shadow(0 16px 26px rgba(0,0,0,.28));
+    }
+    .nav-btn:active{
+      transform: translateY(0) scale(0.99);
+    }
+
+    /* ===== RWD ===== */
+    @media (max-width: 900px){
+      :root{ --btnW: 180px; --btnH: 60px; --btnGap: 14px; }
+      .brand{ top:10%; }
+      .brand .tiny{ font-size:13px; }
+    }
+    @media (max-width: 560px){
+      :root{ --btnW: 46vw; --btnH: 58px; --btnGap: 12px; }
+      .brand .tiny{ font-size:12px; }
+    }
+	
+	/* ===== 燈箱 ===== */
+.gallery{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+}
+
+.gallery__item{
+  border-radius: 12px;
+  overflow:hidden;
+  background: rgba(0,0,0,.06);
+  cursor:pointer;
+  position:relative;
+}
+
+.gallery__item img{
+  width:100%;
+  height:160px;
+  object-fit: cover;
+  display:block;
+  transform: scale(1);
+  transition: transform .2s ease;
+}
+
+.gallery__item:active img{
+  transform: scale(0.98);
+}
+
+/* ===== Universal Touch Lightbox ===== */
+.lightbox{
+  position: fixed;
+  inset: 0;
+  z-index: 999999;              /* 永遠最上層 */
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 2vw, 24px);
+}
+.lightbox.is-open{ display:flex; }
+
+.lightbox__backdrop{
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,.78);
+  backdrop-filter: blur(6px);
+}
+
+.lightbox__panel{
+  position: relative;
+  width: min(1200px, 94vw);
+  max-height: 90vh;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(15,15,15,.86);
+  border: 1px solid rgba(255,255,255,.15);
+  box-shadow: 0 30px 70px rgba(0,0,0,.45);
+  z-index: 1;
+}
+
+.lightbox__content{
+  width:100%;
+  padding: 18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* 圖片自適應 */
+.lightbox__content img{
+  max-width: 100%;
+  max-height: calc(90vh - 120px); /* 留給關閉按鈕 */
+  width:auto;
+  height:auto;
+  border-radius: 12px;
+  display:block;
+}
+
+/* HTML5 影片自適應 */
+.lightbox__content video{
+  width: min(1100px, 94vw);
+  max-height: calc(90vh - 120px);
+  border-radius: 12px;
+  background:#000;
+}
+
+/* iframe 影片（YouTube/Vimeo）16:9 */
+.lightbox__iframe{
+  width: min(1100px, 94vw);
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow:hidden;
+  background:#000;
+}
+.lightbox__iframe iframe{
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+}
+
+/* 觸控友善的關閉按鈕 */
+.lightbox__close{
+  position:absolute;
+  top: 12px;
+  right: 12px;
+  height: 56px;
+  min-width: 120px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.35);
+  background: rgba(0,0,0,.45);
+  color:#fff;
+  cursor:pointer;
+  z-index: 2;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 10px;
+
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.lightbox__close span:first-child{ font-size: 22px; line-height: 1; }
+.lightbox__closeText{ font-size: 15px; letter-spacing: .12em; }
+
+body.is-lock{ overflow:hidden; }
+	/* ===== 燈箱 ===== */
+	
+	/* ===== 影片雙欄排列 ===== */
+.video-grid{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6%;
+  width:100%;
+  margin:0 auto;
+}
+
+.video-thumb{
+  width:40%;
+  max-width:520px;
+  cursor:pointer;
+  transition: transform .2s ease;
+}
+
+.video-thumb:active{
+  transform: scale(0.97);
+}
+		/* ===== 影片雙格RWD ===== */
+	@media (max-width: 900px){
+  .video-grid{
+    flex-direction:column;
+    gap:24px;
+  }
+
+  .video-thumb{
+    width:80%;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="stage">
+
+  <div class="bg-layer"><div class="bg"></div></div>
+
+  <div class="content-layer">
+    <div class="content-panel">
+      <div class="content-scroll">
+	<div class="video-grid">
+
+  <img
+    class="video-thumb"
+    data-lightbox
+    data-youtube-id="KnPzXYsPy4E"
+    src="images/p11_1.png"
+    alt="北靈宮介紹影片"
+  />
+
+  <img
+    class="video-thumb"
+    data-lightbox
+    data-youtube-id="drGtdcWVWkM"
+    src="images/p5-v.png"
+    alt="六月六開天門影片"
+  />
+		
+</div><br>
+	<div class="video-grid">
+
+  <img
+    class="video-thumb"
+    data-lightbox
+    data-youtube-id="lFWojjLaqN4"
+    src="images/p6-v.png"
+    alt="七月七中元普度薦拔影片"
+  />
+
+  <img
+    class="video-thumb"
+    data-lightbox
+    data-youtube-id="ge7Y1i4po7E"
+    src="images/p7-v.png"
+    alt="九月九玄天上帝得道飛升影片"
+  />
+		
+</div><br><hr>
+		  
+<div style="height:60px;border-radius:12px;"></div>
+      </div>
+      <div class="resize-handle"></div>
+    </div>
+  </div>
+
+  <div class="ui-layer"><!-- 上方功能列 -->
+    <header class="topbar">
+		      <div class="actions2">
+        <a class="action2-btn home" href="../index.html">
+          <span></span>
+        </a>
+      </div>
+
+      <div class="title-wrap">
+        <div class="title-text">相關影片介紹</div>
+       </div>
+
+      <div class="actions">
+        <a class="action-btn next" href="./p01_history.html">
+          <span></span>
+        </a>
+      </div>
+    </header>
+
+    <div class="ink"></div>
+
+    <div class="nav-panel">
+      <nav class="nav-grid">
+        <a class="nav-btn" href="./p01_history.html">北靈宮<br>重大事蹟</a>
+        <a class="nav-btn" href="./p02_events-2026.html">2026丙午馬年<br>北靈宮活動資訊</a>
+        <a class="nav-btn" href="./p03_tongtian-incense.html">正月初一～初九<br>點通天香</a>
+        <a class="nav-btn" href="./p04_birthday-xuantian.html">三月三<br>玄天上帝聖誕</a>
+        <a class="nav-btn" href="./p05_half-year-festival.html">六月六<br>半年節開天門</a>
+        <a class="nav-btn" href="./p06_ghost-festival.html">七月薦拔大法會<br>慶讚中元普度</a>
+        <a class="nav-btn" href="./p07_chongyang.html">九月九重陽暨<br/>玄天上帝得道飛昇</a>
+        <a class="nav-btn" href="./p08_tianshe.html">天赦日</a>
+        <a class="nav-btn is-invert" href="./09_videos.html">北靈宮<br>相關影片介紹</a>
+      </nav>
+    </div>
+
+  </div>
+</div>
+	<!-- 燈箱容器開頭 -->
+<!-- Universal Touch Lightbox (Image/Video) -->
+<div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="lightbox__backdrop" data-lb-close></div>
+
+  <div class="lightbox__panel" role="document">
+    <button class="lightbox__close" type="button" data-lb-close aria-label="關閉燈箱">
+      <span aria-hidden="true">✕</span>
+      <span class="lightbox__closeText">關閉</span>
+    </button>
+
+    <div class="lightbox__content" id="lightboxContent"></div>
+  </div>
+</div>
+	<!-- ✅ YouTube player warm-up（不顯示、不影響版面） -->
+<div id="yt-preload" style="position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;">
+  <iframe
+    src="https://www.youtube-nocookie.com/embed/KnPzXYsPy4E?playsinline=1&rel=0&modestbranding=1"
+    loading="eager"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allow="autoplay; encrypted-media; fullscreen; picture-in-picture">
+  </iframe>
+</div>
+	
+	
+	<script>
+/* =========================================================
+   Universal Touch Lightbox (Image / HTML5 Video / YouTube-Vimeo)
+   + YouTube Error 153 hardening (referrerpolicy + nocookie)
+   ---------------------------------------------------------
+   Usage:
+   1) Image:
+      <img data-lightbox src=".../001.jpg">
+      or <a data-lightbox href=".../001.jpg">...</a>
+
+   2) HTML5 video file:
+      <a data-lightbox href=".../intro.mp4">Play</a>
+      or <video data-lightbox src=".../intro.mp4"></video>
+
+   3) YouTube by ID (recommended, avoids URL mistakes):
+      <img data-lightbox data-youtube-id="KnPzXYsPy4E" src="https://img.youtube.com/vi/KnPzXYsPy4E/hqdefault.jpg">
+
+   4) YouTube/Vimeo embed URL:
+      <a data-lightbox data-src="https://www.youtube-nocookie.com/embed/ID?autoplay=1&rel=0&playsinline=1">...</a>
+      <a data-lightbox data-src="https://player.vimeo.com/video/ID?autoplay=1">...</a>
+
+   Notes:
+   - Make sure your <head> meta refresh is correct or remove it:
+     <meta http-equiv="refresh" content="6000000; url=http://...">
+   ========================================================= */
+
+(() => {
+  const lb = document.getElementById('lightbox');
+  const content = document.getElementById('lightboxContent');
+
+  if (!lb || !content) {
+    console.warn('[Lightbox] Missing #lightbox or #lightboxContent');
+    return;
+  }
+
+  const isVideoFile = (url) => /\.(mp4|webm|ogg)(\?.*)?$/i.test(url || '');
+  const isImageFile = (url) => /\.(png|jpg|jpeg|webp|gif|svg)(\?.*)?$/i.test(url || '');
+  const isYouTubeEmbed = (url) => /youtube(-nocookie)?\.com\/embed\//i.test(url || '');
+  const isVimeoEmbed = (url) => /player\.vimeo\.com\/video\//i.test(url || '');
+
+  const safeOrigin = () => {
+    // Some kiosk/offline contexts may have "null" origin; avoid breaking the URL.
+    try {
+      const o = window.location.origin;
+      return (o && o !== 'null') ? encodeURIComponent(o) : '';
+    } catch {
+      return '';
+    }
+  };
+
+  function open(html) {
+    content.innerHTML = html;
+    lb.classList.add('is-open');
+    lb.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('is-lock');
+  }
+
+  function close() {
+    lb.classList.remove('is-open');
+    lb.setAttribute('aria-hidden', 'true');
+    // Clearing stops YouTube/HTML5 video immediately
+    content.innerHTML = '';
+    document.body.classList.remove('is-lock');
+  }
+
+  function buildYouTubeEmbedById(id) {
+    const origin = safeOrigin();
+    const originQS = origin ? `&origin=${origin}` : '';
+    // nocookie + playsinline + modestbranding improves kiosk stability
+    return (
+      `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}` +
+      `?autoplay=1&rel=0&playsinline=1&modestbranding=1${originQS}`
+    );
+  }
+
+  function openIframe(src) {
+    // ✅ referrerpolicy is the key fix for many "Error 153" cases
+    open(`
+      <div class="lightbox__iframe">
+        <iframe
+          src="${src}"
+          allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
+      </div>
+    `);
+  }
+
+  function openVideo(src) {
+    open(`
+      <video controls autoplay playsinline>
+        <source src="${src}">
+        您的瀏覽器不支援影片播放。
+      </video>
+    `);
+  }
+
+  function openImage(src) {
+    open(`<img src="${src}" alt="">`);
+  }
+
+  // ✅ Event delegation: works for dynamically injected content
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-lightbox]');
+    if (!t) return;
+
+    e.preventDefault();
+
+    // 1) Preferred: YouTube ID
+    const ytId = t.dataset.youtubeId;
+    if (ytId) {
+      openIframe(buildYouTubeEmbedById(ytId));
+      return;
+    }
+
+    // 2) data-src > href > src
+    let src = t.dataset.src || t.getAttribute('href') || t.getAttribute('src');
+    if (!src) return;
+
+    // If user accidentally passes a normal YouTube watch URL, convert it
+    // https://www.youtube.com/watch?v=KnPzXYsPy4E -> embed
+    const m = src.match(/youtube\.com\/watch\?v=([a-zA-Z0-9_-]{6,})/i);
+    if (m && m[1]) {
+      openIframe(buildYouTubeEmbedById(m[1]));
+      return;
+    }
+
+    if (isImageFile(src)) {
+      openImage(src);
+      return;
+    }
+
+    if (isVideoFile(src)) {
+      openVideo(src);
+      return;
+    }
+
+    // YouTube/Vimeo embed URL or other iframe URL
+    if (isYouTubeEmbed(src) || isVimeoEmbed(src)) {
+      // If it's youtube.com/embed/..., you may keep it; nocookie is better but optional.
+      // We'll leave as-is; you can pass nocookie yourself in data-src.
+      openIframe(src);
+      return;
+    }
+
+    // Fallback: treat as iframe
+    openIframe(src);
+  });
+
+  // Close when clicking backdrop or close button (elements carrying data-lb-close)
+  lb.addEventListener('click', (e) => {
+    if (e.target.matches('[data-lb-close]')) close();
+  });
+
+  // ESC close (desktop fallback)
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lb.classList.contains('is-open')) close();
+  });
+
+  // Optional: expose close for other scripts
+  window.__closeLightbox = close;
+})();
+
+</script>
+	
+	<!-- 燈箱容器結尾 -->
+</body>
+</html>

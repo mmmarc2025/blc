@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>北靈宮｜Bei Ling Temple</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <style>
+    :root{
+      --max: 1280px;
+      --safeX: 18px;
+      --safeB: 22px;       /* 底部安全距（避免手機手勢條） */
+      --btnW: 210px;
+      --btnH: 64px;
+      --btnGap: 18px;
+
+      --inkOpacity: .98;
+      --gold: #f5d36a;
+
+      /* 按鈕 PNG 底圖（請自行放到 assets） */
+      --btnPng: url("./assets/btn-bg.png");
+      /* 反向色文字色（搭配反向按鈕） */
+      --btnInvertText: #f5d36a;
+      /* 正常文字色（亮底） */
+      --btnText: #fff3da;
+    }
+
+    *{ box-sizing:border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Noto Sans TC", "Segoe UI", sans-serif;
+      background:#000;
+      overflow-x:hidden;
+    }
+
+    /* ===== 舞台（滿版） ===== */
+    .stage{
+      position:relative;
+      min-height:100vh;
+      width:100%;
+      overflow:hidden;
+
+    }
+/* ===== 最下層：背景 ===== */
+    .bg-layer{
+      position:absolute;
+      inset:0;
+      z-index:1;
+    }
+    .bg-layer .bg{
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.12)),
+        url("./images/index_bg2.jpg") center/cover no-repeat;
+      transform: scale(1.02);
+    }
+    .bg-layer .bg::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(900px 360px at 50% 16%, rgba(255,255,255,.22), transparent 60%);
+      opacity:.6;
+      pointer-events:none;
+    }
+
+    /* 中央品牌文字（你也可換成透明PNG Logo） */
+    .brand{
+      position:absolute;
+      left:50%;
+      top:14%;
+      transform:translateX(-50%);
+      text-align:center;
+      color: var(--gold);
+      text-shadow: 0 10px 30px rgba(0,0,0,.35);
+      pointer-events:none;
+      user-select:none;
+      padding: 0 12px;
+    }
+    .brand .tiny{
+      font-size:14px;
+      letter-spacing:.22em;
+      opacity:.95;
+    }
+    .brand .title{
+      margin:10px 0 0;
+      font-size: clamp(44px, 7vw, 92px);
+      font-weight: 900;
+      letter-spacing:.10em;
+      line-height:1.05;
+    }
+    .brand .sub{
+      margin-top:10px;
+      font-size: clamp(14px, 2vw, 20px);
+      letter-spacing:.25em;
+      opacity:.92;
+    }
+
+    /* ===== 最上層：水墨 + 按鈕 ===== */
+    .ui-layer{
+      position:absolute;
+      inset:0;
+      z-index:2;
+      pointer-events:none; /* 整層不擋；可點擊的元素再開 */
+    }
+
+    /* 水墨疊圖（透明 PNG/SVG） */
+    .ink{
+      position:absolute;
+      inset:0;
+      opacity: var(--inkOpacity);
+      background: url("./images/index_ink.png") center bottom / cover no-repeat;
+      pointer-events:none;
+      animation: inkBreath 6s ease-in-out infinite;
+    }
+    @keyframes inkBreath{
+      0%,100%{ transform: translateY(0) scale(1); filter:saturate(1); }
+      50%{ transform: translateY(6px) scale(1.01); filter:saturate(1.05); }
+    }
+
+    /* 9按鈕面板（固定底部置中） */
+    .nav-panel{
+      position:absolute;
+      left:50%;
+      bottom: max(var(--safeB), env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      width: min(var(--max), calc(100% - var(--safeX)*2));
+      padding: 0 var(--safeX);
+      pointer-events:auto;
+    }
+
+    .nav-grid{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap: var(--btnGap);
+      padding: 10px 0 0;
+    }
+
+    /* ===== 按鈕：使用 PNG 底圖（可反向色） ===== */
+    .nav-btn{
+      width: var(--btnW);
+      height: var(--btnH);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding: 0 16px;
+      border-radius: 10px;
+
+      /* 這裡改成 PNG 底圖 */
+      background: none;
+      background-image: url("./images/index_footer_bg1.png");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+
+      /* 文字顏色：亮底用深色字 */
+      color: var(--btnText);
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-decoration:none;
+      cursor:pointer;
+
+      position:relative;
+      transform: translateZ(0);
+      will-change: transform;
+      overflow:hidden;
+
+      /* 陰影（可視需要調強） */
+      filter: drop-shadow(0 12px 18px rgba(0,0,0,.24));
+      user-select:none;
+
+      /* 入場 + 漂浮 */
+      animation:
+        rise .7s ease forwards,
+        float 3.6s ease-in-out infinite;
+      opacity:0;
+    }
+
+    /* 單顆反向色：只要加 .is-invert */
+    .nav-btn.is-invert{
+     background-image: url("./images/index_footer_bg2.png");
+    }
+
+
+    /* 入場延遲（9顆） */
+    .nav-btn:nth-child(1){ animation-delay: .05s, .9s; }
+    .nav-btn:nth-child(2){ animation-delay: .10s, 1.0s; }
+    .nav-btn:nth-child(3){ animation-delay: .15s, 1.1s; }
+    .nav-btn:nth-child(4){ animation-delay: .20s, 1.2s; }
+    .nav-btn:nth-child(5){ animation-delay: .25s, 1.3s; }
+    .nav-btn:nth-child(6){ animation-delay: .30s, 1.4s; }
+    .nav-btn:nth-child(7){ animation-delay: .35s, 1.5s; }
+    .nav-btn:nth-child(8){ animation-delay: .40s, 1.6s; }
+    .nav-btn:nth-child(9){ animation-delay: .45s, 1.7s; }
+
+    @keyframes rise{
+      from{ transform: translateY(18px); opacity:0; }
+      to{ transform: translateY(0); opacity:1; }
+    }
+    @keyframes float{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-6px); }
+    }
+
+    /* 光澤掃過（維持原本效果） */
+    .nav-btn::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: linear-gradient(120deg,
+        transparent 35%,
+        rgba(255,255,255,.55) 48%,
+        transparent 60%);
+      transform: translateX(-60%) rotate(12deg);
+      opacity:0;
+      transition: opacity .25s ease;
+      pointer-events:none;
+    }
+    .nav-btn:hover::after{
+      opacity:1;
+      animation: shine 1.1s ease;
+    }
+    @keyframes shine{
+      from{ transform: translateX(-70%) rotate(12deg); }
+      to{ transform: translateX(70%) rotate(12deg); }
+    }
+
+    .nav-btn:hover{
+      transform: translateY(-2px) scale(1.02);
+      /* hover 亮一點 */
+      filter: brightness(1.06) drop-shadow(0 16px 26px rgba(0,0,0,.28));
+    }
+    .nav-btn.is-invert:hover{
+      filter: invert(1) hue-rotate(180deg) brightness(1.06) drop-shadow(0 16px 26px rgba(0,0,0,.28));
+    }
+    .nav-grid.is-invert .nav-btn:hover{
+      filter: invert(1) hue-rotate(180deg) brightness(1.06) drop-shadow(0 16px 26px rgba(0,0,0,.28));
+    }
+    .nav-btn:active{
+      transform: translateY(0) scale(0.99);
+    }
+
+    /* ===== RWD ===== */
+    @media (max-width: 900px){
+      :root{ --btnW: 180px; --btnH: 60px; --btnGap: 14px; }
+      .brand{ top:10%; }
+      .brand .tiny{ font-size:13px; }
+    }
+    @media (max-width: 560px){
+      :root{ --btnW: 46vw; --btnH: 58px; --btnGap: 12px; }
+      .brand .tiny{ font-size:12px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage">
+
+    <!-- ===== 最下層：背景 ===== -->
+    <div class="bg-layer">
+      <div class="bg"></div>
+
+      <!-- 中央文字：你也可換成透明PNG Logo -->
+      <div class="brand" aria-hidden="true">
+        <div class="tiny"></div>
+        <div class="title"></div>
+        <div class="sub"></div>
+      </div>
+    </div>
+
+    <!-- ===== 最上層：水墨 + 9 按鈕 ===== -->
+    <div class="ui-layer">
+      <div class="ink" aria-hidden="true"></div>
+
+      <div class="nav-panel">
+        <!-- 若要整排反向色，加入 class：is-invert -->
+        <!-- <nav class="nav-grid is-invert" aria-label="主選單"> -->
+        <nav class="nav-grid" aria-label="主選單">
+          <a class="nav-btn" data-link="./pages/p01_history.html">北靈宮<br/>重大事蹟</a>
+          <a class="nav-btn" data-link="./pages/p02_events-2026.html">2026丙午馬年<br>北靈宮活動資訊</a>
+          <a class="nav-btn" data-link="./pages/p03_tongtian-incense.html">正月初一～初九<br/>點通天香</a>
+          <a class="nav-btn" data-link="./pages/p04_birthday-xuantian.html">三月三<br/>玄天上帝聖誕</a>
+          <a class="nav-btn" data-link="./pages/p05_half-year-festival.html">六月六<br/>半年節開天門</a>
+          <a class="nav-btn" data-link="./pages/p06_ghost-festival.html">七月薦拔大法會<br>慶讚中元普度</a>
+          <a class="nav-btn" data-link="./pages/p07_chongyang.html">九月九重陽暨<br/>玄天上帝得道飛昇</a>
+          <a class="nav-btn" data-link="./pages/p08_tianshe.html">天赦日</a>
+          <a class="nav-btn" data-link="./pages/p09_videos.html">北靈宮<br/>相關影片介紹</a>
+        </nav>
+      </div>
+    </div>
+
+  </div>
+	<audio src="./bgm.mp3" autoplay loop></audio>
+
+  <!-- ===== 點擊：淡出後跳頁 ===== -->
+  <script>
+    (function () {
+      const stage = document.querySelector('.stage');
+      const buttons = document.querySelectorAll('.nav-btn[data-link]');
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const url = btn.dataset.link;
+          if (!url) return;
+
+          stage.classList.add('is-leaving');
+
+          setTimeout(() => {
+            window.location.href = url;
+          }, 280);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
