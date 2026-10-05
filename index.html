@@ -254,10 +254,118 @@
       :root{ --btnW: 46vw; --btnH: 58px; --btnGap: 12px; }
       .brand .tiny{ font-size:12px; }
     }
+
+    /* ===== 點擊進入：解鎖背景音樂 ===== */
+    .enter-gate{
+      position:fixed;
+      inset:0;
+      z-index:30;
+      width:100%;
+      height:100%;
+      margin:0;
+      padding:28px 20px;
+      border:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      color:var(--gold);
+      background:
+        radial-gradient(880px 420px at 50% 40%, rgba(245,211,106,.18), transparent 64%),
+        linear-gradient(180deg, rgba(6,5,4,.88), rgba(6,5,4,.64) 46%, rgba(6,5,4,.90));
+      font-family:"Songti TC","PMingLiU","Noto Serif TC","Noto Sans TC",serif;
+      -webkit-tap-highlight-color:transparent;
+      appearance:none;
+      -webkit-appearance:none;
+      user-select:none;
+      opacity:1;
+      transition:opacity .45s ease;
+    }
+    .enter-gate.is-dismissing{
+      opacity:0;
+      pointer-events:none;
+    }
+    .enter-gate:focus{
+      outline:none;
+    }
+    .enter-gate:focus-visible{
+      outline:2px solid var(--gold);
+      outline-offset:-10px;
+    }
+    .enter-gate__content{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      max-width:min(92vw, 640px);
+      text-shadow:0 10px 28px rgba(0,0,0,.45);
+    }
+    .enter-gate__eyebrow{
+      font-family:system-ui,-apple-system,"Noto Sans TC","Segoe UI",sans-serif;
+      font-size:12px;
+      letter-spacing:.42em;
+      padding-left:.42em;
+      opacity:.86;
+    }
+    .enter-gate__title{
+      margin-top:16px;
+      font-size:clamp(56px, 12vw, 108px);
+      font-weight:700;
+      letter-spacing:.2em;
+      padding-left:.2em;
+      line-height:1;
+    }
+    .enter-gate__rule{
+      width:88px;
+      height:1px;
+      margin:22px 0 18px;
+      background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .enter-gate__cta{
+      padding:12px 32px 12px calc(32px + .34em);
+      border:1px solid rgba(245,211,106,.9);
+      border-radius:999px;
+      background:rgba(245,211,106,.1);
+      letter-spacing:.34em;
+      font-size:clamp(16px, 2.4vw, 20px);
+      font-weight:700;
+      box-shadow:0 0 0 0 rgba(245,211,106,.35);
+      animation:enterPulse 2.6s ease-in-out infinite;
+    }
+    .enter-gate:hover .enter-gate__cta,
+    .enter-gate:focus-visible .enter-gate__cta{
+      background:rgba(245,211,106,.2);
+    }
+    .enter-gate__hint{
+      margin-top:18px;
+      font-family:system-ui,-apple-system,"Noto Sans TC","Segoe UI",sans-serif;
+      font-size:13px;
+      letter-spacing:.14em;
+      opacity:.8;
+    }
+    @keyframes enterPulse{
+      0%,100%{ box-shadow:0 0 0 0 rgba(245,211,106,.32); }
+      70%{ box-shadow:0 0 0 12px rgba(245,211,106,0); }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .enter-gate{ transition:none; }
+      .enter-gate__cta{ animation:none; }
+    }
   </style>
 </head>
 
 <body>
+  <button type="button" class="enter-gate" id="enterGate" autofocus aria-label="點擊進入北靈宮">
+    <span class="enter-gate__content">
+      <span class="enter-gate__eyebrow">BEI LING TEMPLE</span>
+      <span class="enter-gate__title">北靈宮</span>
+      <span class="enter-gate__rule" aria-hidden="true"></span>
+      <span class="enter-gate__cta">點擊進入</span>
+      <span class="enter-gate__hint">輕觸畫面，或按 Enter</span>
+    </span>
+  </button>
+  <noscript><style>#enterGate{display:none}</style></noscript>
+
   <div class="stage">
 
     <!-- ===== 最下層：背景 ===== -->
@@ -294,13 +402,22 @@
     </div>
 
   </div>
-	<audio src="./bgm.mp3" autoplay loop></audio>
+  <!-- Unmuted autoplay is blocked. #enterGate calls play() on the first gesture. -->
+  <audio id="bgm" src="./bgm.mp3" loop preload="auto"></audio>
+  <script src="./assets/bgm.js"></script>
 
   <!-- ===== 點擊：淡出後跳頁 ===== -->
   <script>
     (function () {
       const stage = document.querySelector('.stage');
       const buttons = document.querySelectorAll('.nav-btn[data-link]');
+      const gate = document.getElementById('enterGate');
+      const audio = document.getElementById('bgm');
+
+      if (stage && gate) {
+        stage.setAttribute('inert', '');
+        stage.setAttribute('aria-hidden', 'true');
+      }
 
       buttons.forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -315,6 +432,69 @@
           }, 280);
         });
       });
+
+      if (!gate || !audio) return;
+
+      const reduceMotion = window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let locked = true;
+
+      function finishDismiss() {
+        gate.hidden = true;
+        if (stage) {
+          stage.removeAttribute('inert');
+          stage.removeAttribute('aria-hidden');
+        }
+        if (document.activeElement === gate) gate.blur();
+      }
+
+      function dismiss(event) {
+        if (!locked) return;
+        locked = false;
+
+        if (window.BeiLingBgm) window.BeiLingBgm.play();
+        else {
+          audio.muted = false;
+          const pending = audio.play();
+          if (pending && pending.catch) pending.catch(function () {});
+        }
+
+        if (event) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+        gate.classList.add('is-dismissing');
+        gate.setAttribute('aria-hidden', 'true');
+
+        if (reduceMotion) {
+          finishDismiss();
+          return;
+        }
+
+        let done = false;
+        const timer = window.setTimeout(function () {
+          if (done) return;
+          done = true;
+          finishDismiss();
+        }, 520);
+        gate.addEventListener('transitionend', function (ev) {
+          if (ev.propertyName !== 'opacity' || done) return;
+          done = true;
+          window.clearTimeout(timer);
+          finishDismiss();
+        });
+      }
+
+      gate.addEventListener('click', dismiss);
+      window.addEventListener('keydown', function (event) {
+        if (!locked) return;
+        if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+          dismiss(event);
+        }
+      });
+
+      if (typeof gate.focus === 'function') gate.focus();
     })();
   </script>
 </body>
