@@ -613,7 +613,9 @@ body.is-lock{ overflow:hidden; }
     allow="autoplay; encrypted-media; fullscreen; picture-in-picture">
   </iframe>
 </div>
-<audio src="./bgm.mp3" autoplay loop></audio>		
+<!-- Subpage BGM: no enter gate. ../bgm.mp3 via assets/bgm.js (plays after the homepage tap; otherwise the next tap or Enter/Space). -->
+<audio id="bgm" src="../bgm.mp3" loop preload="auto"></audio>
+<script src="../assets/bgm.js"></script>		
 	
 <script>
 (() => {
