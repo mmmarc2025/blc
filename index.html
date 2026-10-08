@@ -255,7 +255,11 @@
       .brand .tiny{ font-size:12px; }
     }
 
-    /* ===== 點擊進入：解鎖背景音樂 ===== */
+    /* ===== 點擊進入：解鎖背景音樂 =====
+       The gate paints its own copy of the temple photo. A dark scrim sits on
+       top of that photo so the gold type is not fighting the roof, and so the
+       page underneath (banners, nav, the title baked into the photo) cannot
+       show through. Tap / Enter behavior is unchanged. */
     .enter-gate{
       position:fixed;
       inset:0;
@@ -263,16 +267,21 @@
       width:100%;
       height:100%;
       margin:0;
-      padding:28px 20px;
+      padding:32px 22px;
       border:0;
       display:flex;
       align-items:center;
       justify-content:center;
       cursor:pointer;
-      color:var(--gold);
-      background:
-        radial-gradient(880px 420px at 50% 40%, rgba(245,211,106,.18), transparent 64%),
-        linear-gradient(180deg, rgba(6,5,4,.88), rgba(6,5,4,.64) 46%, rgba(6,5,4,.90));
+      color:#ffe7a3;
+      background-color:#070605;
+      background-image:
+        radial-gradient(ellipse 72% 54% at 50% 46%, rgba(7,6,5,.92) 0%, rgba(7,6,5,.70) 46%, transparent 72%),
+        linear-gradient(180deg, rgba(7,6,5,.88) 0%, rgba(7,6,5,.80) 30%, rgba(7,6,5,.46) 48%, rgba(7,6,5,.58) 66%, rgba(7,6,5,.92) 86%, rgba(7,6,5,.97) 100%),
+        url("./images/index_bg3.jpg");
+      background-repeat:no-repeat;
+      background-position:center, center, center;
+      background-size:cover, cover, cover;
       font-family:"Songti TC","PMingLiU","Noto Serif TC","Noto Sans TC",serif;
       -webkit-tap-highlight-color:transparent;
       appearance:none;
@@ -280,6 +289,7 @@
       user-select:none;
       opacity:1;
       transition:opacity .45s ease;
+      overflow:hidden;
     }
     .enter-gate.is-dismissing{
       opacity:0;
@@ -298,54 +308,93 @@
       align-items:center;
       text-align:center;
       max-width:min(92vw, 640px);
-      text-shadow:0 10px 28px rgba(0,0,0,.45);
     }
     .enter-gate__eyebrow{
       font-family:system-ui,-apple-system,"Noto Sans TC","Segoe UI",sans-serif;
-      font-size:12px;
-      letter-spacing:.42em;
-      padding-left:.42em;
-      opacity:.86;
+      font-size:16px;
+      font-weight:600;
+      letter-spacing:.28em;
+      padding-left:.28em;
+      color:#fff6e0;
+      text-shadow:
+        0 1px 0 rgba(0,0,0,.85),
+        0 2px 10px rgba(0,0,0,.9);
     }
     .enter-gate__title{
-      margin-top:16px;
-      font-size:clamp(56px, 12vw, 108px);
+      margin-top:14px;
+      font-size:clamp(68px, 18vw, 112px);
       font-weight:700;
-      letter-spacing:.2em;
-      padding-left:.2em;
-      line-height:1;
+      letter-spacing:.14em;
+      padding-left:.14em;
+      line-height:1.05;
+      color:#ffe39a;
+      text-shadow:
+        0 2px 0 rgba(0,0,0,.8),
+        1px 0 0 rgba(20,12,4,.9),
+        -1px 0 0 rgba(20,12,4,.9),
+        0 1px 0 rgba(20,12,4,.9),
+        0 -1px 0 rgba(20,12,4,.9),
+        0 8px 18px rgba(0,0,0,.85),
+        0 18px 40px rgba(0,0,0,.65);
     }
     .enter-gate__rule{
       width:88px;
       height:1px;
-      margin:22px 0 18px;
-      background:linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin:20px 0 18px;
+      background:linear-gradient(90deg, transparent, #ffe7a3, transparent);
+      box-shadow:0 1px 4px rgba(0,0,0,.6);
     }
     .enter-gate__cta{
-      padding:12px 32px 12px calc(32px + .34em);
-      border:1px solid rgba(245,211,106,.9);
+      padding:13px 28px 13px calc(28px + .22em);
+      border:1.5px solid #f5d36a;
       border-radius:999px;
-      background:rgba(245,211,106,.1);
-      letter-spacing:.34em;
-      font-size:clamp(16px, 2.4vw, 20px);
+      background:linear-gradient(180deg, rgba(74,16,12,.96), rgba(36,8,6,.98));
+      color:#ffe7a3;
+      letter-spacing:.22em;
+      font-size:clamp(18px, 4.8vw, 22px);
       font-weight:700;
-      box-shadow:0 0 0 0 rgba(245,211,106,.35);
+      line-height:1.2;
+      text-shadow:0 1px 2px rgba(0,0,0,.75);
+      box-shadow:
+        0 10px 24px rgba(0,0,0,.5),
+        inset 0 1px 0 rgba(255,236,190,.28);
       animation:enterPulse 2.6s ease-in-out infinite;
     }
     .enter-gate:hover .enter-gate__cta,
     .enter-gate:focus-visible .enter-gate__cta{
-      background:rgba(245,211,106,.2);
+      background:linear-gradient(180deg, rgba(110,28,18,.98), rgba(52,12,8,.98));
     }
     .enter-gate__hint{
-      margin-top:18px;
+      margin-top:16px;
       font-family:system-ui,-apple-system,"Noto Sans TC","Segoe UI",sans-serif;
-      font-size:13px;
-      letter-spacing:.14em;
-      opacity:.8;
+      font-size:16px;
+      font-weight:600;
+      letter-spacing:.06em;
+      line-height:1.4;
+      color:#fff8ea;
+      background:rgba(0,0,0,.62);
+      padding:8px 16px;
+      border-radius:999px;
+      text-shadow:0 1px 2px rgba(0,0,0,.85);
     }
     @keyframes enterPulse{
-      0%,100%{ box-shadow:0 0 0 0 rgba(245,211,106,.32); }
-      70%{ box-shadow:0 0 0 12px rgba(245,211,106,0); }
+      0%,100%{ box-shadow:0 10px 24px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,236,190,.28), 0 0 0 0 rgba(245,211,106,.35); }
+      70%{ box-shadow:0 10px 24px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,236,190,.28), 0 0 0 12px rgba(245,211,106,0); }
+    }
+    @media (max-width: 560px){
+      .enter-gate__eyebrow{
+        font-size:17px;
+        letter-spacing:.16em;
+        padding-left:.16em;
+      }
+      .enter-gate__title{
+        letter-spacing:.12em;
+        padding-left:.12em;
+      }
+      .enter-gate__hint{
+        font-size:17px;
+        max-width:100%;
+      }
     }
     @media (prefers-reduced-motion: reduce){
       .enter-gate{ transition:none; }
